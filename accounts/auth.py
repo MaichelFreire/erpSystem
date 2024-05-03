@@ -18,7 +18,7 @@ class Authentication:
         
         user = User.objects.filter(email=email).first()
 
-        if check_password(password, user.password):
+        if not check_password(password, user.password):
 
             raise EXCEPTION_AUTH
 

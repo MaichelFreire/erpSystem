@@ -39,23 +39,23 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # apps
-    'accounts',
-    'companies',
-
-    # restframework
+    # Rest Framework
     'rest_framework',
 
-    # cors
-    'corsheaders',
+    # Cors headers
+    "corsheaders",
+
+    # Apps
+    "accounts",
+    "companies"
 ]
 
 MIDDLEWARE = [
-    'django.middleware.common.CommonMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
 
     'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',    
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -122,7 +122,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-AUTH_USER_MODELS = 'accounts.User'
+AUTH_USER_MODEL = 'accounts.User'
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
@@ -148,13 +148,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 #  Authtetication
 REST_FRAMEWORK = {
-    
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     )
-  
 }
 
 SIMPLE_JWT = {
-    'SLIDING_TOKEN_LIFETIME': timedelta(days=1)
+    "SLIDING_TOKEN_LIFETIME": timedelta(days=1)
 }

@@ -10,7 +10,7 @@ class GetUser(Base):
 
     def get(self, request):
         user = User.objects.filter(id=request.user.id).first()
-        print(user, 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+        
         enterprise = self.get_enterprise_user(user)
 
         serializer = UserSerializer(user)

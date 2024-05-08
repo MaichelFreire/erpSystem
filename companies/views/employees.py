@@ -21,7 +21,7 @@ class Employess(Base):
 
         employees = Employee.objects.filter(enterprise_id=enterprise_id).exclude(user_id=owner_id).all()
 
-        serializer = EmployeeSerializer(employees, many=True)
+        serializer = EmployeesSerializer(employees, many=True)
 
         return Response({"employess": serializer.data})
     

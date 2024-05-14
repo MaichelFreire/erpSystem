@@ -27,10 +27,10 @@ class Groups(Base):
     
     
     def post(self, request):
-        enterprise_id = self.get_enterprise_id(enterprise_id=enterprise_id)
-
+        enterprise_id = self.get_enterprise_id(request.user.id)
+        
         name = request.data.get('name')
-        permissions = request.get('permissions')
+        permissions = request.data.get('permissions')
 
         if not name:
             raise RequiredFields
@@ -54,7 +54,7 @@ class Groups(Base):
                     
                     if not GroupPermissons.objects.filter(group_id=group_created.id, permission_id=item).exists():
                         GroupPermissons.objects.create(
-                            group_created=group_created.id,
+                            group_id=group_created.id,
                             permission_id=item
                         )
             except ValueError:
@@ -68,7 +68,7 @@ class GroupDetail(Base):
     permission_classes = [GroupPermission]
 
     def get(self, request, group_id):
-        enterprise_id = self.get_enterprise_id(enterprise_id=enterprise_id)  
+        enterprise_id = self.get_enterprise_id(request.user.id)  
 
         self.get_group(group_id, enterprise_id)
 
@@ -81,11 +81,11 @@ class GroupDetail(Base):
         })
     
     def put(self, request, group_id):
-        enterprise_id = self.get_enterprise_id(enterprise_id=enterprise_id)
+        enterprise_id = self.get_enterprise_id(request.user.id)
 
         self.get_group(group_id, enterprise_id)
         name = request.data.get('name')
-        permissions = request.get('permissions')
+        permissions = request.data.get('permissions')
 
         if name:
             Group.objects.filter(id=group_id).update(
@@ -94,21 +94,23 @@ class GroupDetail(Base):
 
         GroupPermissons.objects.filter(group_id=group_id).delete()
 
-        if permission:
+        if permissions:
             try:
                     
-                    for item in permissions:
-                        permission = Permission.objects.filter(id=item).exists()
+                for item in permissions:
+                    permission = Permission.objects.filter(id=item).exists()
 
-                        if not permission:
-                            
-                            raise APIException("This {p} permission is invalid".format(p=item))
+                    if not permission:
                         
-                        if not GroupPermissons.objects.filter(group_id=group_id, permission_id=item).exists():
-                            GroupPermissons.objects.create(
-                                group_created=group_id,
-                                permission_id=item
-                            )
+                        raise APIException("This {p} permission is invalid".format(p=item))
+                    
+                    if not GroupPermissons.objects.filter(group_id=group_id, permission_id=item).exists():
+                        GroupPermissons.objects.create(
+                            group_id=group_id,
+                            permission_id=item
+                        )
+                    
+                return Response({"success": True})
 
             except ValueError:
                 

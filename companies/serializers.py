@@ -79,10 +79,10 @@ class GroupsSerializer(serializers.ModelSerializer):
         )
 
 
-    def get_permissons(self, obj):
-        groups = GroupPermissons.objects.filter(group_id=obj.group.id).all()
+    def get_permissions(self, obj):
+        groups = GroupPermissons.objects.filter(group_id=obj.id).all()
         permissions = []
-
+        print(groups)
         for group in groups:
 
             permissions.append({

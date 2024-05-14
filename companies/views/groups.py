@@ -123,9 +123,7 @@ class GroupDetail(Base):
 
         Group.objects.filter(id=group_id, enterprise_id=enterprise_id).delete()
 
-        return Response({"success": True})
-    
-    
+        return Response({"success": True}) 
     
 
 

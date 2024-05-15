@@ -46,7 +46,7 @@ class Base(APIView):
     
     def get_task(self, task_id, enterprise_id):
         task = Task.objects.filter(id=task_id, enterprise_id=enterprise_id).first()
-
+        print(task)
         if not task:
             raise NotFoundTask
         

@@ -79,12 +79,18 @@ class TaskDetail(Base):
         title = request.data.get('title', task.title)
         employee_id = request.data.get('employee_id', task.employee.id)
         description = request.data.get('description', task.description)
-        status_id = request.data.get('status_id', task.description)
+        status_id = request.data.get('status_id', task.status.id)
         due_date = request.data.get('due_date', task.due_date)
 
         #  Validators
         self.get_status(status_id)
         self.get_employee(employee_id, request.user.id)
+
+        if due_date and due_date != task.due_date:
+            try:
+                due_date = datetime.datetime.strptime(due_date, '%Y-%m-%d %H:%M')
+            except ValueError:
+                raise APIException("The date is not pattern 'Year-month-day'", "invalid_date")
 
         data = {
             "title": title,
